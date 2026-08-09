@@ -6,45 +6,34 @@ on:
       - feature
 
 permissions:
-  id-token: write
   contents: read
 
 jobs:
-
   terraform-cd:
-
     runs-on: ubuntu-latest
 
     steps:
 
-      # 1. Checkout code
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # 3. Azure Login
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          creds: '{"clientId":"4f643487-2a9f-4340-8c17-af429ba67805","clientSecret":"fc780bf3-3811-4036-baaa-349a88f419d1","subscriptionId":"4bdb1173-0046-44b6-8053-eb1416c8b631
+","tenantId":"278882f4-f5ef-49fd-94c7-e9c92e6cab9b"}'
 
-      # 4. Terraform Init
       - name: Terraform Init
         run: terraform init
 
-      # 5. Terraform Validate
       - name: Terraform Validate
         run: terraform validate
 
-      # 6. Terraform Plan
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
-      # 7. Terraform Apply
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
